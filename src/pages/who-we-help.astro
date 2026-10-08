@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CTA from '../components/CTA.astro';
+import { audiences } from '../data/audiences';
+import { pathTo } from '../lib/paths';
+---
+<Layout title="Who we help in the Hudson Valley" description="Technology support for healthcare, professional offices, small businesses, nonprofits, schools, libraries and public agencies in the Hudson Valley." page="/who-we-help/">
+  <div class="container content-bottom"><header class="page-intro"><p class="page-kicker">Who we help</p><h1>Local organizations.<br />Real-world needs.</h1><p class="lead">Different organizations use technology in different ways. We start by listening, then agree on work that fits your team and your priorities.</p></header>
+    {audiences.map(audience => <section class="audience-section" id={audience.id}><h2>{audience.name}</h2><div><ul>{audience.problems.map(problem => <li>{problem}</li>)}</ul><div class="related-services"><span>Services that fit:</span>{audience.services.map(([name, group]) => <a href={pathTo(`/services/#${group}`)}>{name}</a>)}</div></div></section>)}
+  </div>
+  <CTA title="Not sure where you fit? Start here." text="Tell us about your organization. We’ll help you identify a useful first step." />
+</Layout>

@@ -1,0 +1,45 @@
+---
+import { pathTo, requestEndpoint } from '../lib/paths';
+import { organizationTypes, staffOptions, itOptions, serviceOptions, fieldLimits } from '../lib/form-contract';
+interface Props { kind?: 'assessment' | 'contact'; region?: string; id?: string }
+const { kind = 'assessment', region = 'Hudson Valley', id = 'request-form' } = Astro.props;
+const assessment = kind === 'assessment';
+const endpoint = requestEndpoint();
+const publishableKey = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() || '';
+const configured = Boolean(endpoint && publishableKey);
+const fieldId = (name: string) => `${id}-${name}`;
+---
+<div class:list={['request-form', { 'form-contact': !assessment }]}>
+  <div class="form-heading"><h2>{assessment ? 'Tell us about your organization.' : 'Send us a message.'}</h2><p>Fields marked with * are required. Please don’t include sensitive information.</p>{assessment && region === 'Newburgh' && <p class="landing-region">For organizations in the City and Town of Newburgh, NY.</p>}</div>
+  {!configured && <p class="preview-notice" role="status"><strong>Local preview: submissions are unavailable.</strong> The clinic’s request service has not been connected. You can explore this form, but your information cannot be sent.</p>}
+  <form data-request-form data-kind={kind} data-endpoint={endpoint} data-publishable-key={publishableKey} method="post" action={configured ? endpoint : pathTo(assessment ? '/request/' : '/contact/')} novalidate>
+    <input type="hidden" name="kind" value={kind} /><input type="hidden" name="region" value={region} />
+    <div class="honeypot" aria-hidden="true"><label for={fieldId('website')}>Leave this field empty<input type="text" name="website" id={fieldId('website')} tabindex="-1" autocomplete="off" maxlength={fieldLimits.website} /></label></div>
+    <div class="form-grid" data-form-fields>
+      {assessment && <div class="field field-full"><label for={fieldId('organization')}>Organization name *</label><input id={fieldId('organization')} name="organization" required maxlength={fieldLimits.organization} autocomplete="organization" /><span class="field-error" id={`${fieldId('organization')}-error`} data-error="organization"></span></div>}
+      <div class:list={['field', { 'field-full': !assessment }]}><label for={fieldId('name')}>Your name *</label><input id={fieldId('name')} name="name" required maxlength={fieldLimits.name} autocomplete="name" /><span class="field-error" id={`${fieldId('name')}-error`} data-error="name"></span></div>
+      {assessment && <div class="field"><label for={fieldId('role')}>Role / title <span class="optional">(optional)</span></label><input id={fieldId('role')} name="role" maxlength={fieldLimits.role} autocomplete="organization-title" /><span class="field-error" id={`${fieldId('role')}-error`} data-error="role"></span></div>}
+      <div class:list={['field', { 'field-full': !assessment }]}><label for={fieldId('email')}>Email *</label><input id={fieldId('email')} name="email" type="email" required maxlength={fieldLimits.email} autocomplete="email" inputmode="email" /><span class="field-error" id={`${fieldId('email')}-error`} data-error="email"></span></div>
+      {assessment && <>
+        <div class="field"><label for={fieldId('phone')}>Phone <span class="optional">(optional)</span></label><input id={fieldId('phone')} name="phone" type="tel" maxlength={fieldLimits.phone} autocomplete="tel" /><span class="field-error" id={`${fieldId('phone')}-error`} data-error="phone"></span></div>
+        <div class="field"><label for={fieldId('organizationType')}>Organization type <span class="optional">(optional)</span></label><select id={fieldId('organizationType')} name="organizationType"><option value="">Select an organization type</option>{organizationTypes.map(option => <option value={option}>{option}</option>)}</select><span class="field-error" id={`${fieldId('organizationType')}-error`} data-error="organizationType"></span></div>
+        <div class="field"><label for={fieldId('town')}>Town / city *</label><input id={fieldId('town')} name="town" required maxlength={fieldLimits.town} autocomplete="address-level2" /><span class="field-error" id={`${fieldId('town')}-error`} data-error="town"></span></div>
+        <div class="field"><label for={fieldId('staff')}>Approximate number of staff <span class="optional">(optional)</span></label><select id={fieldId('staff')} name="staff"><option value="">Select a staff range</option>{staffOptions.map(option => <option value={option}>{option}</option>)}</select><span class="field-error" id={`${fieldId('staff')}-error`} data-error="staff"></span></div>
+        <div class="field"><label for={fieldId('itSupport')}>Who handles your IT today? <span class="optional">(optional)</span></label><select id={fieldId('itSupport')} name="itSupport"><option value="">Select an option</option>{itOptions.map(option => <option value={option}>{option}</option>)}</select><span class="field-error" id={`${fieldId('itSupport')}-error`} data-error="itSupport"></span></div>
+        <fieldset class="field-full"><legend>What would you like help with? <span class="optional">(optional)</span></legend><div class="choice-grid">{serviceOptions.map((service, index) => <label class="choice" for={fieldId(`service-${index}`)}><input id={fieldId(`service-${index}`)} type="checkbox" name="services" value={service} />{service}</label>)}</div><span class="field-error" id={`${fieldId('services')}-error`} data-error="services"></span></fieldset>
+      </>}
+      <div class="field field-full"><label for={fieldId('message')}>{assessment ? <>Anything else we should know? <span class="optional">(optional)</span></> : 'Message *'}</label><textarea id={fieldId('message')} name="message" rows={assessment ? 4 : 6} required={!assessment} maxlength={fieldLimits.message} aria-describedby={`${fieldId('message')}-hint`}></textarea><span class="field-hint" id={`${fieldId('message')}-hint`}>Don’t share passwords, network details, client records or financial information.</span><span class="field-error" id={`${fieldId('message')}-error`} data-error="message"></span></div>
+      {assessment && <>
+        <fieldset class="field-full"><legend>Best way to reach you</legend><div class="radio-row"><label class="choice"><input name="reachBy" type="radio" value="Email" checked />Email</label><label class="choice"><input name="reachBy" type="radio" value="Phone" />Phone</label></div><span class="field-error" data-error="reachBy"></span></fieldset>
+        <div class="field-full"><label class="consent-choice" for={fieldId('consent')}><input id={fieldId('consent')} name="consent" type="checkbox" required /><span>I understand the Marist Tech Clinic is a student-led program. Any assessment will be scoped and approved in writing before work begins. *</span></label><span class="field-error" id={`${fieldId('consent')}-error`} data-error="consent"></span></div>
+      </>}
+    </div>
+    <div class="form-submit"><button class="button" type="submit" disabled={!configured} data-submit>{assessment ? 'Request a free assessment' : 'Send message'}</button><p>{assessment ? 'No commitment to a follow-on project.' : 'Your message goes to the clinic team.'}</p></div>
+    <div class="form-status" data-form-status role="alert" tabindex="-1"></div>
+    <noscript><p class="preview-notice">This form needs JavaScript to send your request securely. Enable JavaScript and reload before submitting. No information has been sent.</p></noscript>
+  </form>
+  <div class="form-success" data-form-success hidden tabindex="-1" role="status"><h2>Thanks for getting in touch.</h2><p>{assessment ? 'Thanks! A member of our team will reach out within 2 business days to set up a short call.' : 'Thanks! Your message has been received by the clinic team.'}</p></div>
+</div>
+<script>
+  import '../lib/forms';
+</script>

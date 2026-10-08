@@ -1,0 +1,6 @@
+---
+import { pathTo } from '../lib/paths';
+interface Props { title?: string; text?: string }
+const { title = 'A useful first step. A clearer way forward.', text = 'Tell us what’s getting in the way. We’ll start with a conversation and a free assessment.' } = Astro.props;
+---
+<section class="cta-band"><div class="container cta-inner"><div><h2>{title}</h2><p>{text}</p></div><a class="button button-white" href={pathTo('/request/')}>Request a free assessment</a></div></section>

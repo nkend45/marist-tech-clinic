@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RequestForm from './RequestForm.astro';
+import HowItWorks from './HowItWorks.astro';
+interface Props { town: string; page: string; areaLabel?: string }
+const { town, page, areaLabel = `${town}, NY` } = Astro.props;
+---
+<Layout title={`Free technology & security check-ups for ${town}`} description={`Request a free Marist Tech Clinic technology and security assessment for your organization in ${areaLabel}. Student-led, scoped and approved in writing.`} page={page}>
+  <div class="container landing-layout"><div class="landing-copy"><p class="page-kicker">For {areaLabel}</p><h1>Free technology & security check-ups for {town} organizations.</h1><p class="lead">Real help from Marist students. A practical first look at your technology, at no cost and with no commitment to a follow-on project.</p><ul class="landing-benefits"><li>A checklist of your current technology and security setup.</li><li>A plain-English summary of quick wins and bigger risks.</li><li>Clear next steps that fit your organization.</li></ul><h2>How it works</h2><HowItWorks compact /><p class="privacy-note"><strong>Student-led, faculty-supported.</strong> We never ask for passwords or client records. All work is scoped and approved in writing first. We do not provide 24/7 emergency support.</p></div><RequestForm region={town} id="regional-request" /></div>
+</Layout>

@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CTA from '../components/CTA.astro';
+import { serviceGroups } from '../data/services';
+import { pathTo } from '../lib/paths';
+---
+<Layout title="Technology, cybersecurity & AI services" description="Explore 17 Marist Tech Clinic services, from free technology assessments to cybersecurity training, websites, data cleanup and practical AI workshops." page="/services/">
+  <div class="container">
+    <header class="page-intro page-intro-wide"><p class="page-kicker">Our services</p><h1>Practical help.<br />Clear takeaways.</h1><p class="lead">Every engagement starts with a free Initial Technology & Security Assessment. From there, we agree on the scope, cost, and what you’ll receive before any work begins.</p></header>
+    <nav class="service-nav" aria-label="Service areas">{serviceGroups.map(group => <a href={pathTo(`/services/#${group.id}`)}>{group.name}</a>)}</nav>
+    {serviceGroups.map(group => <section class="catalog-group" id={group.id} aria-labelledby={`${group.id}-title`}>
+      <div class="catalog-heading"><h2 id={`${group.id}-title`}>{group.name}</h2><p>{group.intro}</p></div>
+      <div class="service-grid">{group.services.map(service => <article class:list={['service-card', { featured: service.cost === 'FREE' }]}>
+        <span class="cost">{service.cost}</span><h3>{service.name}</h3><p>{service.included}</p><dl class="deliverable"><dt>You receive</dt><dd>{service.deliverable}</dd></dl>{'note' in service && <span class="service-note">{service.note}</span>}
+      </article>)}</div>
+    </section>)}
+    <div class="catalog-download"><a class="button button-outline" href={pathTo('/files/marist-tech-clinic-services.pdf')} download>Download the service catalog (PDF)</a><p>One-page overview of every service above, ready to print or share.</p></div>
+  </div>
+  <CTA title="Don’t see what you need? Tell us." text="We’re happy to talk it through. A short conversation is a good place to start." />
+</Layout>

@@ -1,0 +1,8 @@
+project_id = "marist-tech-clinic"
+
+[functions.submit-request]
+enabled = true
+# Public anonymous form: publishable keys are not JWTs. Authorization is enforced
+# at the server-only RPC, not by requiring a visitor account at this endpoint.
+verify_jwt = false
+entrypoint = "./functions/submit-request/index.ts"

@@ -1,0 +1,13 @@
+---
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const steps = [
+  ['Request', 'Tell us about your organization. About 2 minutes is all you need.'],
+  ['Talk', 'A 20-minute call to understand your setup and goals.'],
+  ['Assess', 'With your written approval, we do a scoped, free Initial Technology & Security Assessment.'],
+  ['Report', 'You get a checklist and a plain-English summary report with quick wins and bigger risks. You decide if you want more help.'],
+];
+---
+<ol class:list={['steps', { compact }]}>
+  {steps.map(([title, text], i) => <li><span class="step-number" aria-hidden="true">{i + 1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}
+</ol>

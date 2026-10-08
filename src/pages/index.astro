@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import CTA from '../components/CTA.astro';
+import { pathTo } from '../lib/paths';
+import { serviceGroups } from '../data/services';
+import { Store, HeartHandshake, BookOpen, Landmark, ArrowUpRight, Check } from '@lucide/astro';
+---
+<Layout title="Real technology help for Hudson Valley organizations" description="Free technology and security assessments, training and one-time projects for Hudson Valley small businesses, nonprofits and schools, from Marist students.">
+  <section class="hero container">
+    <div class="hero-copy">
+      <p class="location-line"><span aria-hidden="true" class="location-dot"></span> Serving New York’s Hudson Valley</p>
+      <h1>Real technology help for Hudson Valley organizations, from Marist students.</h1>
+      <p class="lead">Free technology and security assessments, training and one-time projects for small businesses, nonprofits and schools, at little to no cost.</p>
+      <div class="actions"><a class="button" href={pathTo('/request/')}>Request a free assessment</a><a class="button button-outline" href={pathTo('/services/')}>See our services</a></div>
+      <p class="hero-footnote">A conversation first. A clear plan next.</p>
+    </div>
+    <div class="assessment-stage">
+      <div class="assessment-sheet" aria-label="Sample assessment checklist, illustrative only">
+        <div class="sheet-top"><span>Marist Tech Clinic</span><span class="sample-tag">Sample</span></div>
+        <h2>Your technology.<br />A little clearer.</h2>
+        <p class="sheet-subtitle">Initial Technology & Security Assessment</p>
+        <div class="checklist">
+          <div><span class="checkmark" aria-hidden="true"><Check size={14} /></span><span>Understand your current setup<small>Devices, network & everyday tools</small></span></div>
+          <div><span class="checkmark" aria-hidden="true"><Check size={14} /></span><span>Spot the quick wins<small>Practical changes you can prioritize</small></span></div>
+          <div><span class="checkmark" aria-hidden="true"><Check size={14} /></span><span>Identify the bigger risks<small>A plain-English explanation of what matters</small></span></div>
+          <div><span class="checkmark" aria-hidden="true"><Check size={14} /></span><span>Map out your next steps<small>Recommendations, on your terms</small></span></div>
+        </div>
+        <div class="sheet-bottom"><span>Checklist + summary report</span><strong>Free to start.</strong></div>
+      </div>
+      <p class="sample-caption">An illustration of what you receive, not a client report.</p>
+    </div>
+  </section>
+  <div class="trust-strip"><div class="container trust-inner"><p>Student-led, faculty-supported</p><p>We never ask for passwords or client records</p><p>Everything is scoped and approved in writing first</p></div></div>
+  <section class="section container">
+    <div class="section-heading"><div><h2>Good help starts with listening.</h2><p>Four steps from “where do we start?” to a plan you can use.</p></div><a class="text-link" href={pathTo('/faq/')}>Your questions, answered</a></div>
+    <HowItWorks />
+  </section>
+  <section class="section section-neutral"><div class="container">
+    <div class="section-heading"><div><h2>Built for the people<br />who keep our communities going.</h2><p>You don’t need an IT department to start a conversation.</p></div></div>
+    <div class="audience-grid">
+      <a href={pathTo('/who-we-help/#small-businesses')}><Store class="audience-symbol" aria-hidden="true" /><h3>Small businesses</h3><p>Less friction in the tools you rely on every day.</p><span class="text-link">Explore how we can help</span></a>
+      <a href={pathTo('/who-we-help/#nonprofits')}><HeartHandshake class="audience-symbol" aria-hidden="true" /><h3>Nonprofits</h3><p>Technology that supports your people and your mission.</p><span class="text-link">Explore how we can help</span></a>
+      <a href={pathTo('/who-we-help/#schools')}><BookOpen class="audience-symbol" aria-hidden="true" /><h3>Schools & libraries</h3><p>Practical support for connected learning and shared spaces.</p><span class="text-link">Explore how we can help</span></a>
+      <a href={pathTo('/who-we-help/#government')}><Landmark class="audience-symbol" aria-hidden="true" /><h3>Local government & public agencies</h3><p>Help your team prepare, protect, and serve.</p><span class="text-link">Explore how we can help</span></a>
+    </div>
+  </div></section>
+  <section class="section container service-overview">
+    <div><h2>From everyday problems<br />to what’s next.</h2><p class="lead">Start with the free assessment. Together, we’ll find the right help for your organization.</p><a class="button button-outline" href={pathTo('/services/')}>Explore all services</a></div>
+    <div class="service-links">{serviceGroups.map(group => <a href={pathTo(`/services/#${group.id}`)}><div><h3>{group.name}</h3><p>{group.intro}</p></div><ArrowUpRight size={22} aria-hidden="true" /></a>)}</div>
+  </section>
+  <!-- Social proof placeholder: hidden until approved, attributable material is provided. -->
+  <section hidden aria-label="Future community stories"><h2>Community stories</h2><p>Placeholder for approved client stories. No client evidence has been supplied.</p></section>
+  <CTA />
+</Layout>

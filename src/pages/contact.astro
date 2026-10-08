@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RequestForm from '../components/RequestForm.astro';
+import { pathTo } from '../lib/paths';
+---
+<Layout title="Contact the clinic" description="Send Marist Tech Clinic a question or request a call about technology support for your Hudson Valley organization. No sensitive information is needed." page="/contact/">
+  <div class="container"><header class="page-intro"><p class="page-kicker">Contact</p><h1>Let’s talk.</h1><p class="lead">Have a question before requesting an assessment? Send a short message to the clinic team.</p></header><div class="contact-layout"><RequestForm kind="contact" id="contact-form" /><aside class="contact-info"><h2>Prefer to talk?</h2><p>Request a call and tell us a little about your organization. We’ll begin with a short conversation about what you need.</p><a class="text-link" href={pathTo('/request/')}>Request a call</a><div class="contact-official"><h3>Official contact details</h3><p>Email: to be provided.<br />Phone: to be provided.</p></div><p class="small">We’re a student-led program, not an emergency support service. For urgent or ongoing needs, contact your IT provider.</p></aside></div></div>
+</Layout>
