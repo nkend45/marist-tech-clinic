@@ -11,7 +11,7 @@ export function absoluteUrl(path = '/') {
   return site ? new URL(pathTo(path), site).href : undefined;
 }
 
-export const publicPages = ['', 'services', 'who-we-help', 'newburgh', 'request', 'about', 'faq', 'contact'];
+export const publicPages = ['', 'services', 'who-we-help', 'hudson-valley', 'request', 'about', 'faq', 'contact'];
 
 export function requestEndpoint() {
   const url = import.meta.env.PUBLIC_SUPABASE_URL?.trim().replace(/\/+$/, '');

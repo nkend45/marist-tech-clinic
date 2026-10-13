@@ -10,7 +10,7 @@ const configured = Boolean(endpoint && publishableKey);
 const fieldId = (name: string) => `${id}-${name}`;
 ---
 <div class:list={['request-form', { 'form-contact': !assessment }]}>
-  <div class="form-heading"><h2>{assessment ? 'Tell us about your organization.' : 'Send us a message.'}</h2><p>Fields marked with * are required. Please don’t include sensitive information.</p>{assessment && region === 'Newburgh' && <p class="landing-region">For organizations in the City and Town of Newburgh, NY.</p>}</div>
+  <div class="form-heading"><h2>{assessment ? 'Tell us about your organization.' : 'Send us a message.'}</h2><p>Fields marked with * are required. Please don’t include sensitive information.</p></div>
   {!configured && <p class="preview-notice" role="status"><strong>Local preview: submissions are unavailable.</strong> The clinic’s request service has not been connected. You can explore this form, but your information cannot be sent.</p>}
   <form data-request-form data-kind={kind} data-endpoint={endpoint} data-publishable-key={publishableKey} method="post" action={configured ? endpoint : pathTo(assessment ? '/request/' : '/contact/')} novalidate>
     <input type="hidden" name="kind" value={kind} /><input type="hidden" name="region" value={region} />

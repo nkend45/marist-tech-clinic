@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 
 const root = resolve('dist');
 const base = (process.env.PUBLIC_BASE_PATH || '').replace(/\/$/, '');
-const pages = ['', 'services', 'who-we-help', 'newburgh', 'request', 'about', 'faq', 'contact'];
+const pages = ['', 'services', 'who-we-help', 'hudson-valley', 'request', 'about', 'faq', 'contact'];
 const read = async p => readFile(resolve(root, p), 'utf8');
 
 test('all eight pages contain unique titles and descriptions', async () => {

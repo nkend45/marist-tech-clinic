@@ -5,7 +5,7 @@ import { mkdir } from 'node:fs/promises';
 const origin = process.env.TEST_ORIGIN || 'http://localhost:4321';
 const browser = await chromium.launch({ headless: true, executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
 await mkdir('qa', { recursive: true });
-const pages = ['', 'services/', 'who-we-help/', 'newburgh/', 'request/', 'about/', 'faq/', 'contact/'];
+const pages = ['', 'services/', 'who-we-help/', 'hudson-valley/', 'request/', 'about/', 'faq/', 'contact/'];
 const errors = [];
 try {
   for (const width of [320, 390, 768, 1440]) {
@@ -50,25 +50,25 @@ try {
     payload = route.request().postDataJSON();
     await route.fulfill({ status: reply.status, contentType: 'application/json', body: JSON.stringify(reply.body), headers: { 'access-control-allow-origin': '*' } });
   });
-  await page.route('**/newburgh/', async route => {
+  await page.route('**/hudson-valley/', async route => {
     const response = await route.fetch();
     const html = (await response.text()).replace(/data-endpoint(?:="[^"]*")?/, 'data-endpoint="http://localhost:4322/functions/v1/submit-request"').replace(/data-publishable-key(?:="[^"]*")?/, 'data-publishable-key="test-public-key"').replace(/ disabled(?:="[^"]*")?(?=[\s>])/g, '');
     await route.fulfill({ response, body: html });
   });
-  await page.goto(`${origin}/newburgh/`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/hudson-valley/`, { waitUntil: 'networkidle' });
   const form = page.locator('[data-request-form]');
   const submit = form.getByRole('button', { name: 'Request a free assessment', exact: true });
   await submit.click();
   assert.equal(requests, 0);
   assert.equal(await form.locator('[name=organization]').getAttribute('aria-invalid'), 'true');
-  for (const [name, value] of Object.entries({ organization: 'DEMO test organization', name: 'Test Student', email: 'demo@example.org', town: 'Newburgh' })) await form.locator(`[name=${name}]`).fill(value);
+  for (const [name, value] of Object.entries({ organization: 'DEMO test organization', name: 'Test Student', email: 'demo@example.org', town: 'Poughkeepsie' })) await form.locator(`[name=${name}]`).fill(value);
   await form.locator('[name=consent]').check();
   await form.locator('[name=services]').first().check();
   await submit.click();
   await page.waitForFunction(() => document.querySelector('[data-form-status]').textContent.includes('could not confirm'));
   assert.equal(await form.locator('[name=organization]').inputValue(), 'DEMO test organization');
   assert.equal(await page.locator('[data-form-success]').isVisible(), false);
-  assert.equal(payload.region, 'Newburgh');
+  assert.equal(payload.region, 'Hudson Valley');
   assert.deepEqual(payload.services, ['Cybersecurity']);
   reply = { status: 422, body: { ok: false, error: 'Invalid', fields: { email: 'Enter a valid email address.' } } };
   await submit.click();
@@ -80,7 +80,7 @@ try {
   assert.equal(await form.isVisible(), false);
   assert.ok((await page.locator('[data-form-success]').textContent()).includes('2 business days'));
   assert.deepEqual(errors, [], 'Browser JS errors');
-  console.log('PASS: 32 responsive page checks, mobile menu, keyboard FAQ, preview disabled, validation, failure preservation, server field errors, Newburgh payload and mocked confirmed success.');
+  console.log('PASS: 32 responsive page checks, mobile menu, keyboard FAQ, preview disabled, validation, failure preservation, server field errors, Hudson Valley payload and mocked confirmed success.');
   console.log('Mocked submission test is NOT live Supabase persistence verification. Screenshots saved in qa/.');
 } finally {
   await browser.close();
